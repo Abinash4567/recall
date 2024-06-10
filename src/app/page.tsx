@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <div className="mx-20">
       <Navbar />
-      <Hero/>
+      <Hero />
     </div>
   );
 }
