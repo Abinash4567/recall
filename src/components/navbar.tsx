@@ -11,7 +11,7 @@ function Navbar() {
 
             <div className="flex justify-between">
                 <ModeToggle/>
-                <Button variant="outline" className="ml-2">Get started</Button>
+                <Button variant="outline" className="ml-2 bg-blue-600 hover:bg-blue-800">Get started</Button>
             </div>
 
         </div>

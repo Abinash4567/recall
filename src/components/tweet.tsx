@@ -16,7 +16,7 @@ import Share from "@/components/svgs/share";
 
 function Tweet() {
     return (
-        <div className="w-[600px] p-[12px] border-2 rounded-lg border-gray-400">
+        <div className="w-[570px] p-[12px] border-2 rounded-lg mb-4">
             <div className="flex">
                 <div className="w-[45px] pr-2">
                     <Avatar>
@@ -53,13 +53,13 @@ function Tweet() {
                     />
 
                     <div className="mt-[10px] flex justify-between">
-                        <div className="flex text-gray-600 text-sm"><Comment className="h-[18px] w-[18px] mr-1"/>12</div>
-                        <div className="flex text-gray-600 text-sm"><Repost className="h-[18px] w-[18px] mr-1"/>12</div>
-                        <div className="flex text-gray-600 text-sm"><Hheart className="h-[18px] w-[18px] mr-1"/>12</div>
-                        <div className="flex text-gray-600 text-sm"><Analytics className="h-[18px] w-[18px] mr-1"/>12</div>
+                        <div className="flex text-gray-600 text-sm"><Comment className="h-[18px] w-[18px] mr-1" />12</div>
+                        <div className="flex text-gray-600 text-sm"><Repost className="h-[18px] w-[18px] mr-1" />12</div>
+                        <div className="flex text-gray-600 text-sm"><Hheart className="h-[18px] w-[18px] mr-1" />12</div>
+                        <div className="flex text-gray-600 text-sm"><Analytics className="h-[18px] w-[18px] mr-1" />12</div>
                         <div className="flex text-gray-600 text-sm">
-                            <Bookmark className="h-[18px] w-[18px] mr-1"/>
-                            <Share className="h-[18px] w-[18px] mr-1"/>
+                            <Bookmark className="h-[18px] w-[18px] mr-1" />
+                            <Share className="h-[18px] w-[18px] mr-1" />
                         </div>
                     </div>
                 </div>
