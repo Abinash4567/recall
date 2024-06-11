@@ -3,7 +3,7 @@ import HeroLeft from "./heroleft";
 
 function Hero() {
     return (
-        <div className="border-2 border-green-600 mt-10 flex h-[calc(100vh-100px)]">
+        <div className="mt-10 flex h-[calc(100vh-100px)]">
             <HeroLeft />
             <HeroRight />
         </div>
