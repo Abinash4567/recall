@@ -24,38 +24,30 @@ interface IUserData {
     avatar: string;
 }
 
-export function TweetLoading() {
-    const [tweetData, setTweetData] = useState<IUserData>({
-        username: "",
-        handle: "",
-        tweet: "",
-        image: "",
-        avatar: "",
-    });
-
+export function TweetLoading({ userData }: { userData: IUserData }) {
     return (
         <div className="w-[500px] p-[12px] border border-slate-400 rounded-lg mb-4">
             <div className="flex">
                 <div className="w-[45px] pr-2">
-                    {!tweetData?.avatar ? (
-                        <Skeleton className="w-[40px] h-[40px] rounded-full" />
-                    ) : (
+                    {userData?.avatar.length > 1 ? (
                         <Avatar>
                             <AvatarImage src="/avvatark.png" alt="@shadcn" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
+                    ) : (
+                        <Skeleton className="w-[40px] h-[40px] rounded-full" />
                     )}
                 </div>
 
                 <div>
                     <div className="flex">
-                        {tweetData?.username ? (
+                        {userData?.username ? (
                             <>
-                                <div className="text-sm font-bold pr-1">Abinash Ray Yadav</div>
+                                <div className="text-sm font-bold pr-1">{userData.username}</div>
                                 <div>
                                     <Heart color="#ff0000" size={17} strokeWidth={3} />
                                 </div>
-                                <div className="text-sm pl-1 text-gray-400 pr-1">@rayyadav</div>
+                                <div className="text-sm pl-1 text-gray-400 pr-1">@{userData.handle}</div>
                                 <div className="text-sm text-gray-400 pr-1">20min</div>{" "}
                             </>
                         ) : (
@@ -63,23 +55,15 @@ export function TweetLoading() {
                         )}
                     </div>
 
-                    {tweetData?.tweet ? (
-                        <div className="text-sm mb-2">
-                            Hello, This is my website. This means a lot to me. Lorem ipsum
-                            dolor sit amet consectetur adipisicing elit. Corrupti suscipit
-                            quia quam! Lorem ipsum dolor sit amet consectetur adipisicing
-                            elit. Iste quae est excepturi cumque. Enim iste qui voluptas
-                            explicabo architecto consequuntur quos eum rerum, maxime
-                            necessitatibus! Ipsam provident quos aliquid et blanditiis
-                            exercitationem suscipit eos!
-                        </div>
+                    {userData?.tweet ? (
+                        <div className="text-sm mb-2">{userData.tweet}</div>
                     ) : (
                         <Skeleton className="w-[400px] h-[100px] mb-2" />
                     )}
 
-                    {tweetData?.image ? (
+                    {userData?.image.length > 1 ? (
                         <Image
-                            src={tweetImage}
+                            src={userData.image}
                             height={360}
                             style={{ borderRadius: 9 }}
                             alt="Picture of the author"
