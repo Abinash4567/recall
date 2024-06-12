@@ -22,7 +22,7 @@ interface IUserData {
 
 interface selFile {
     name: string;
-    preview: string;
+    preview: Blob;
 }
 
 export function TweetLoading({ userData, files }: { userData: IUserData, files: selFile[] }) {
@@ -32,7 +32,7 @@ export function TweetLoading({ userData, files }: { userData: IUserData, files: 
                 <div className="w-[45px] pr-2">
                     {files.length >= 1 ? (
                         <Avatar>
-                            <AvatarImage src={files[0].preview} alt="@shadcn" />
+                            <AvatarImage src={files[0].preview as unknown as string} alt="@shadcn" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
                     ) : (
@@ -64,7 +64,7 @@ export function TweetLoading({ userData, files }: { userData: IUserData, files: 
 
                     {files.length > 1 ? (
                         <Image
-                            src={files[0].preview}
+                            src={files[1].preview as unknown as string}
                             height={360}
                             width={400}
                             style={{ borderRadius: 9 }}

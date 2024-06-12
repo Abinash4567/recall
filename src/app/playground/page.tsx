@@ -9,9 +9,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowUpTrayIcon } from '@heroicons/react/24/solid';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useState } from 'react';
-import { FileRejection, useDropzone } from 'react-dropzone';
+import { useDropzone } from 'react-dropzone';
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+// import { getSignature, saveToDatabase } from "../api/upload/route";
 
 interface IUserData {
     username: string;
@@ -21,7 +22,7 @@ interface IUserData {
 
 interface selFile {
     name: string;
-    preview: string;
+    preview: Blob;
 }
 
 export default function Page() {
@@ -35,7 +36,7 @@ export default function Page() {
     const [files, setFiles] = useState<selFile[]>([])
 
 
-    const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
+    const onDrop = useCallback((acceptedFiles: any[], rejectedFiles: any) => {
         setFiles((previousFiles) => [
             ...previousFiles,
             ...acceptedFiles.map((file) => ({
@@ -47,34 +48,21 @@ export default function Page() {
 
         console.log(files);
 
-        if(status === 1) 
-        {
-            console.log(status);
-            console.log(acceptedFiles);
-
-            // setUserData({...userdata, avatar: files[0].preview});
-
+        if (status === 1) {
             setStatus(2);
             setTimeout(() => {
                 setStatus(3);
             }, 2000);
         }
-        else if (status===3)
-        {
-            console.log(status);
-            console.log(acceptedFiles);
-            
-            // setUserData({...userdata, image: files[1].preview});
-
-
+        else if (status === 3) {
             setStatus(4);
             setTimeout(() => {
                 setStatus(5);
             }, 2000);
-        }  
+        }
     }, [files, status]);
 
-    
+
 
     const { getRootProps, getInputProps } = useDropzone({
         accept: {
@@ -118,8 +106,37 @@ export default function Page() {
         },
     });
 
-    function onSubmit(data: z.infer<typeof FormSchema>) {
-        console.log(data);
+
+    async function saveToDB(file: Blob) {
+        const { timestamp, signature } = await getSignature();
+
+        const formData = new FormData();
+
+        formData.append("file", file);
+        formData.append("api_key", process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY!);
+        formData.append("signature", signature);
+        formData.append("timestamp", timestamp.toString());
+        formData.append("folder", "next");
+
+        const endpoint = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_URL!;
+        const data = await fetch(endpoint, {
+            method: "POST",
+            body: formData,
+        }).then((res) => res.json());
+
+        await saveToDatabase({
+            version: data?.version,
+            signature: data?.signature,
+            public_id: data?.public_id,
+        });
+    }
+
+    async function onSubmit(data: z.infer<typeof FormSchema>) {
+        // const response1 = await saveToDB(files[0].preview);
+        // const response2 = await saveToDB(files[1].preview);
+        // console.log(response1, response2)
+        console.log(userdata);
+        console.log(files)
     }
 
     return (
@@ -196,8 +213,6 @@ export default function Page() {
                         />
 
 
-
-
                         {status == 1 && <div className="mt-2">
                             <div className="text-sm font-medium">Avatar</div>
                             <div className="flex">
@@ -213,11 +228,11 @@ export default function Page() {
                                     </div>
                                 </div>
 
-                                <div className="ml-12 text-slate-500">{files.length >=1  ? files[0].name : "eg. user_passport.jpg"}</div>
+                                <div className="ml-12 text-slate-500">{files.length >= 1 ? files[0].name : "eg. user_passport.jpg"}</div>
                             </div>
                         </div>}
 
-                        {(status===2 || status===4) && <Loading className="rounded h-[60px] mt-4" />}
+                        {(status === 2 || status === 4) && <Loading className="rounded h-[60px] mt-4" />}
 
                         {status == 3 && <div className="mt-2">
                             <div className="text-sm font-medium">Image</div>
@@ -243,7 +258,7 @@ export default function Page() {
             </div>
 
             <div>
-                <TweetLoading userData={userdata} files={files}/>
+                <TweetLoading userData={userdata} files={files} />
             </div>
         </div>
     )
