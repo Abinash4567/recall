@@ -18,7 +18,7 @@ function HeroLeft() {
                 </div>
 
 
-                <Button variant="secondary" className="rounded-3xl bg-blue-600 hover:bg-blue-900 mt-5">Try it now</Button>
+                <Button variant="secondary" className="rounded-3xl bg-blue-600 hover:bg-blue-900 mt-5 text-white">Try it now</Button>
             </div>
         </div>
     )
