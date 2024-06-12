@@ -17,8 +17,6 @@ interface IUserData {
     username: string;
     handle: string;
     tweet: string;
-    image: string;
-    avatar: string;
 }
 
 interface selFile {
@@ -31,32 +29,30 @@ export default function Page() {
     const [userdata, setUserData] = useState<IUserData>({
         username: "",
         handle: "",
-        tweet: "",
-        image: "",
-        avatar: ""
+        tweet: ""
     });
 
     const [files, setFiles] = useState<selFile[]>([])
 
 
-    const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
+    const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
         setFiles((previousFiles) => [
             ...previousFiles,
-            ...acceptedFiles.map((file: File) => ({
+            ...acceptedFiles.map((file) => ({
                 ...file,
                 preview: URL.createObjectURL(file),
                 name: file.name,
             })),
         ]);
 
-        console.log(URL.createObjectURL(acceptedFiles[0]))
+        console.log(files);
 
         if(status === 1) 
         {
             console.log(status);
             console.log(acceptedFiles);
 
-            setUserData({...userdata, avatar: files[0].preview});
+            // setUserData({...userdata, avatar: files[0].preview});
 
             setStatus(2);
             setTimeout(() => {
@@ -68,7 +64,7 @@ export default function Page() {
             console.log(status);
             console.log(acceptedFiles);
             
-            setUserData({...userdata, image: files[1].preview});
+            // setUserData({...userdata, image: files[1].preview});
 
 
             setStatus(4);
@@ -76,7 +72,7 @@ export default function Page() {
                 setStatus(5);
             }, 2000);
         }  
-    }, [files, status, userdata]);
+    }, [files, status]);
 
     
 
@@ -217,7 +213,7 @@ export default function Page() {
                                     </div>
                                 </div>
 
-                                <div className="ml-12 text-slate-500">{userdata.avatar ? userdata.avatar : "eg. user_passport.jpg"}</div>
+                                <div className="ml-12 text-slate-500">{files.length >=1  ? files[0].name : "eg. user_passport.jpg"}</div>
                             </div>
                         </div>}
 
@@ -237,7 +233,7 @@ export default function Page() {
                                     </div>
                                 </div>
 
-                                <div className="ml-12 text-slate-500">{userdata.image ? userdata.image : "eg. picnic.jpg"}</div>
+                                <div className="ml-12 text-slate-500">{files.length > 1 ? files[1].name : "eg. picnic.jpg"}</div>
                             </div>
                         </div>}
 
@@ -247,7 +243,7 @@ export default function Page() {
             </div>
 
             <div>
-                <TweetLoading userData={userdata} />
+                <TweetLoading userData={userdata} files={files}/>
             </div>
         </div>
     )

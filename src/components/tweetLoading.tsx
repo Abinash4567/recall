@@ -4,7 +4,6 @@ import {
     AvatarImage,
 } from "@/components/ui/avatar";
 import { Heart } from "lucide-react";
-import tweetImage from "../../public/image.jpg";
 import Image from "next/image";
 
 import Bookmark from "@/components/svgs/bookmark";
@@ -14,24 +13,26 @@ import Hheart from "@/components/svgs/heart";
 import Analytics from "@/components/svgs/analytics";
 import Share from "@/components/svgs/share";
 import { Skeleton } from "./ui/skeleton";
-import { useState } from "react";
 
 interface IUserData {
     username: string;
     handle: string;
     tweet: string;
-    image: string;
-    avatar: string;
 }
 
-export function TweetLoading({ userData }: { userData: IUserData }) {
+interface selFile {
+    name: string;
+    preview: string;
+}
+
+export function TweetLoading({ userData, files }: { userData: IUserData, files: selFile[] }) {
     return (
         <div className="w-[500px] p-[12px] border border-slate-400 rounded-lg mb-4">
             <div className="flex">
                 <div className="w-[45px] pr-2">
-                    {userData?.avatar.length > 1 ? (
+                    {files.length >= 1 ? (
                         <Avatar>
-                            <AvatarImage src="/avvatark.png" alt="@shadcn" />
+                            <AvatarImage src={files[0].preview} alt="@shadcn" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
                     ) : (
@@ -61,10 +62,11 @@ export function TweetLoading({ userData }: { userData: IUserData }) {
                         <Skeleton className="w-[400px] h-[100px] mb-2" />
                     )}
 
-                    {userData?.image.length > 1 ? (
+                    {files.length > 1 ? (
                         <Image
-                            src={userData.image}
+                            src={files[0].preview}
                             height={360}
+                            width={400}
                             style={{ borderRadius: 9 }}
                             alt="Picture of the author"
                         />
