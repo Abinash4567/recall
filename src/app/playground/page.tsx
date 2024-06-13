@@ -12,6 +12,8 @@ import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import axios from "axios";
+import { useToast } from "@/components/ui/use-toast";
 
 interface IUserData {
     username: string;
@@ -25,6 +27,7 @@ interface selFile {
 }
 
 export default function Page() {
+    const { toast } = useToast();
     const [status, setStatus] = useState<number>(1);
     const [userdata, setUserData] = useState<IUserData>({
         username: "",
@@ -108,8 +111,7 @@ export default function Page() {
     });
 
 
-    async function uploadAsset(file: any)
-    {
+    async function uploadAsset(file: any) {
         let formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', 'recall');
@@ -131,7 +133,7 @@ export default function Page() {
                 // console.error('Error uploading file:', errorData);
                 // alert('Failed to upload file: ' + errorData.error.message);
             }
-        } 
+        }
         catch (error) {
             return error;
             // console.error('Error uploading file:', error);
@@ -140,149 +142,214 @@ export default function Page() {
     }
 
 
+    function isValidUrl(url: string): boolean {
+        const urlPattern = new RegExp(
+            '^(https?:\\/\\/)' +
+            '((([a-zA-Z0-9_-]+\\.)+[a-zA-Z]{2,})|' +
+            'localhost)' +
+            '(\\:\\d+)?' +
+            '(\\/[-a-zA-Z0-9@:%._\\+~#=]*)*' +
+            '(\\?[;&a-zA-Z0-9%_.~+=-]*)?' +
+            '(\\#[-a-zA-Z0-9_]*)?$'
+        );
+
+        return urlPattern.test(url);
+    }
+
+
+    async function checkUrl(url: string): Promise<{ valid: boolean; message: string }> {
+        if (!isValidUrl(url)) {
+            return { valid: false, message: "URL syntax is invalid." };
+        }
+
+        if (!url.startsWith("https://")) {
+            return { valid: false, message: "URL is not using HTTPS." };
+        }
+
+        try {
+            const response = await axios.get(url, { timeout: 5000 });
+            if (response.status !== 200) {
+                return {
+                    valid: false,
+                    message: `URL is not reachable, status code: ${response.status}`,
+                };
+            }
+        } catch (error: any) {
+            return {
+                valid: false,
+                message: `URL is not reachable, error: ${error.message}`,
+            };
+        }
+
+        return { valid: true, message: "URL is valid." };
+    }
+
     async function onSubmit(data: z.infer<typeof FormSchema>) {
+        toast({
+            title: "Post Updated.",
+            description: "Your post has been updated.",
+        });
         const avatarResponse = await uploadAsset(avatarFile);
         const imageResponse = await uploadAsset(imageFile);
-        
-        console.log(avatarResponse);
-        console.log(imageResponse);
 
-        const response = await fetch("/api/upload", {
-            method: "POST",
-            body: JSON.stringify(
-                {
-                    username: data.username,
-                    handle: data.handle,
-                    tweet: data.tweet,
-                    avatarURL: avatarResponse,
-                    imageURL: imageResponse,
-                }
-            ),
-        });
+        const response1 = await checkUrl(avatarResponse);
+        const resonse2 = await checkUrl(imageResponse);
 
-    };
+        if (!response1.valid || !resonse2.valid) {
+            toast({
+                title: "Cannot Update your post.",
+                description: "Might be due to invalid file."})
+        }
 
-    return (
-        <div className="mt-8 flex justify-between">
-            <div className="border border-blue-700 rounded-lg p-4 w-1/3 h-5/6">
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)}>
+            const response = await fetch("/api/upload", {
+                method: "POST",
+                body: JSON.stringify(
+                    {
+                        username: data.username,
+                        handle: data.handle,
+                        tweet: data.tweet,
+                        avatarURL: avatarResponse,
+                        imageURL: imageResponse,
+                    }
+                ),
+            });
+            console.log(response);
+            if(1) {
+                toast({
+                    title: "Post Updated.",
+                    description: "Your post has been updated.",
+                });
+            }
+            else
+            {
+                toast({
+                    title: "Cannot Update your post.",
+                    description: "Please try again."})
+            }
 
+        };
 
-                        <FormField
-                            control={form.control}
-                            name="username"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Username</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Enter Username"
-                                            type="text"
-                                            {...field}
-                                            onChange={(e) => {
-                                                setUserData({ ...userdata, username: e.target.value });
-                                                field.onChange(e);
-                                            }}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="handle"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>@User Handle</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Enter user handle"
-                                            type="text"
-                                            {...field}
-                                            onChange={(e) => {
-                                                setUserData({ ...userdata, handle: e.target.value });
-                                                field.onChange(e);
-                                            }}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="tweet"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Tweet</FormLabel>
-                                    <FormControl>
-                                        <Textarea
-                                            placeholder="Write about memorable event."
-                                            className="resize-none"
-                                            {...field}
-                                            onChange={(e) => {
-                                                setUserData({ ...userdata, tweet: e.target.value });
-                                                field.onChange(e);
-                                            }}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+        return (
+            <div className="mt-8 flex justify-between">
+                <div className="border border-blue-700 rounded-lg p-4 w-1/3 h-5/6">
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)}>
 
 
-                        {status == 1 && <div className="mt-2">
-                            <div className="text-sm font-medium">Avatar</div>
-                            <div className="flex">
-                                <div
-                                    {...getRootProps({
-                                        className:
-                                            "rounded hover:bg-slate-800 bg-slate-900 hover:cursor-pointer h-[40px] w-[40px] pt-2"
-                                    })}>
+                            <FormField
+                                control={form.control}
+                                name="username"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Username</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="Enter Username"
+                                                type="text"
+                                                {...field}
+                                                onChange={(e) => {
+                                                    setUserData({ ...userdata, username: e.target.value });
+                                                    field.onChange(e);
+                                                }}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                                    <input {...getInputProps({ name: "file" })} />
-                                    <div className="flex flex-col items-center justify-center gap-4">
-                                        <ArrowUpTrayIcon className="h-5 w-5 fill-current" />
+                            <FormField
+                                control={form.control}
+                                name="handle"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>@User Handle</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="Enter user handle"
+                                                type="text"
+                                                {...field}
+                                                onChange={(e) => {
+                                                    setUserData({ ...userdata, handle: e.target.value });
+                                                    field.onChange(e);
+                                                }}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="tweet"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Tweet</FormLabel>
+                                        <FormControl>
+                                            <Textarea
+                                                placeholder="Write about memorable event."
+                                                className="resize-none"
+                                                {...field}
+                                                onChange={(e) => {
+                                                    setUserData({ ...userdata, tweet: e.target.value });
+                                                    field.onChange(e);
+                                                }}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+
+                            {status == 1 && <div className="mt-2">
+                                <div className="text-sm font-medium">Avatar</div>
+                                <div className="flex">
+                                    <div
+                                        {...getRootProps({
+                                            className:
+                                                "rounded hover:bg-slate-800 bg-slate-900 hover:cursor-pointer h-[40px] w-[40px] pt-2"
+                                        })}>
+
+                                        <input {...getInputProps({ name: "file" })} />
+                                        <div className="flex flex-col items-center justify-center gap-4">
+                                            <ArrowUpTrayIcon className="h-5 w-5 fill-current" />
+                                        </div>
                                     </div>
+
+                                    <div className="ml-12 text-slate-500">{files.length >= 1 ? files[0].name : "eg. user_passport.jpg"}</div>
                                 </div>
+                            </div>}
 
-                                <div className="ml-12 text-slate-500">{files.length >= 1 ? files[0].name : "eg. user_passport.jpg"}</div>
-                            </div>
-                        </div>}
+                            {(status === 2 || status === 4) && <Loading className="rounded h-[60px] mt-4" />}
 
-                        {(status === 2 || status === 4) && <Loading className="rounded h-[60px] mt-4" />}
-
-                        {status == 3 && <div className="mt-2">
-                            <div className="text-sm font-medium">Image</div>
-                            <div className="flex">
-                                <div
-                                    {...getRootProps({
-                                        className:
-                                            "border-2 borer-red-500 rounded hover:bg-slate-800 bg-slate-900 hover:cursor-pointer h-[40px] w-[40px] pt-2"
-                                    })} >
-                                    <input {...getInputProps({ name: "file" })} />
-                                    <div className="flex flex-col items-center justify-center gap-4">
-                                        <ArrowUpTrayIcon className="h-5 w-5 fill-current" />
+                            {status == 3 && <div className="mt-2">
+                                <div className="text-sm font-medium">Image</div>
+                                <div className="flex">
+                                    <div
+                                        {...getRootProps({
+                                            className:
+                                                "border-2 borer-red-500 rounded hover:bg-slate-800 bg-slate-900 hover:cursor-pointer h-[40px] w-[40px] pt-2"
+                                        })} >
+                                        <input {...getInputProps({ name: "file" })} />
+                                        <div className="flex flex-col items-center justify-center gap-4">
+                                            <ArrowUpTrayIcon className="h-5 w-5 fill-current" />
+                                        </div>
                                     </div>
+
+                                    <div className="ml-12 text-slate-500">{files.length > 1 ? files[1].name : "eg. picnic.jpg"}</div>
                                 </div>
+                            </div>}
 
-                                <div className="ml-12 text-slate-500">{files.length > 1 ? files[1].name : "eg. picnic.jpg"}</div>
-                            </div>
-                        </div>}
+                            <Button type="submit" className="mt-4">Create Memory</Button>
+                        </form>
+                    </Form>
+                </div>
 
-                        <Button type="submit" className="mt-4">Create Memory</Button>
-                    </form>
-                </Form>
+                <div>
+                    <TweetLoading userData={userdata} files={files} />
+                </div>
             </div>
-
-            <div>
-                <TweetLoading userData={userdata} files={files} />
-            </div>
-        </div>
-    )
-}
+        )
+    }

@@ -13,7 +13,7 @@ function Navbar() {
                 <ModeToggle/>
                 <Button variant="outline" className="ml-2 bg-blue-600 hover:bg-blue-800 text-white">Get started</Button>
             </div>
-
+            
         </div>
     )
 }
