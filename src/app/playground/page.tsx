@@ -188,10 +188,6 @@ export default function Page() {
     }
 
     async function onSubmit(data: z.infer<typeof FormSchema>) {
-        toast({
-            title: "Post Updated.",
-            description: "Your post has been updated.",
-        });
         const avatarResponse = await uploadAsset(avatarFile);
         const imageResponse = await uploadAsset(imageFile);
 
@@ -201,8 +197,13 @@ export default function Page() {
         if (!response1.valid || !resonse2.valid) {
             toast({
                 title: "Cannot Update your post.",
-                description: "Might be due to invalid file.",
+                description: "Might be due to invalid file. Reloading!!",
             });
+
+            setTimeout(()=>{
+                window.location.reload()
+                }, 2000)
+
         } else {
             const response = await fetch("/api/upload", {
                 method: "POST",
@@ -214,20 +215,26 @@ export default function Page() {
                     imageURL: imageResponse,
                 }),
             });
-            console.log(response);
+            // console.log(response);
             if (response.ok) {
                 toast({
                     title: "Post Added.",
-                    description: "Your post has been added.",
+                    description: "Add more!!",
                 });
-            } else {
+
+                setTimeout(()=>{
+                    window.location.reload()
+                    }, 2000)
+            } else 
+            {
                 toast({
                     title: "Cannot Update your post.",
-                    description: "Please try again.",
+                    description: "Please try again. Refreshing!!",
                 });
+                
                 setTimeout(()=>{
-                router.push("/playground");
-                }, 2000)
+                    window.location.reload()
+                    }, 2000)
             }
         }
     }
