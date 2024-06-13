@@ -13,6 +13,7 @@ import Repost from "@/components/svgs/repost";
 import Hheart from "@/components/svgs/heart";
 import Analytics from "@/components/svgs/analytics";
 import Share from "@/components/svgs/share";
+import logo from "../../public/logo.png";
 
 function Tweet() {
     return (
@@ -20,7 +21,7 @@ function Tweet() {
             <div className="flex">
                 <div className="w-[45px] pr-2">
                     <Avatar>
-                        <AvatarImage src="/avvatark.png" alt="@shadcn" />
+                        <AvatarImage src={logo.src} alt="@shadcn" />
                         <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
                 </div>
@@ -53,10 +54,22 @@ function Tweet() {
                     />
 
                     <div className="mt-[10px] flex justify-between">
-                        <div className="flex text-gray-600 text-sm"><Comment className="h-[18px] w-[18px] mr-1" />12</div>
-                        <div className="flex text-gray-600 text-sm"><Repost className="h-[18px] w-[18px] mr-1" />12</div>
-                        <div className="flex text-gray-600 text-sm"><Hheart className="h-[18px] w-[18px] mr-1" />12</div>
-                        <div className="flex text-gray-600 text-sm"><Analytics className="h-[18px] w-[18px] mr-1" />12</div>
+                        <div className="flex text-gray-600 text-sm">
+                            <Comment className="h-[18px] w-[18px] mr-1" />
+                            12
+                        </div>
+                        <div className="flex text-gray-600 text-sm">
+                            <Repost className="h-[18px] w-[18px] mr-1" />
+                            12
+                        </div>
+                        <div className="flex text-gray-600 text-sm">
+                            <Hheart className="h-[18px] w-[18px] mr-1" />
+                            12
+                        </div>
+                        <div className="flex text-gray-600 text-sm">
+                            <Analytics className="h-[18px] w-[18px] mr-1" />
+                            12
+                        </div>
                         <div className="flex text-gray-600 text-sm">
                             <Bookmark className="h-[18px] w-[18px] mr-1" />
                             <Share className="h-[18px] w-[18px] mr-1" />

@@ -4,37 +4,62 @@ const cloudinaryConfig = cloudinary.config({
     cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME,
     api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
-    secure: true
+    // secure: true
 })
 
-export async function getSignature() {
-    const timestamp = Math.round(new Date().getTime() / 1000)
 
-    const signature = cloudinary.utils.api_sign_request(
-        { timestamp, folder: 'next' },
-        cloudinaryConfig.api_secret!
-    )
+async function uploadAsset(file: any)
+{
+    let formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'recall'); // Replace with your upload preset
 
-    return { timestamp, signature }
-}
+    try {
+        const response = await fetch(`https://api.cloudinary.com/v1_1/dxh7ycus9/image/upload`, {
+            method: 'POST',
+            body: formData,
+        });
 
-export async function saveToDatabase({
-    public_id,
-    version,
-    signature,
-}: {
-    public_id: string;
-    version: string;
-    signature: string;
-}) {
-    // verify the data
-    const expectedSignature = cloudinary.utils.api_sign_request(
-        { public_id, version },
-        cloudinaryConfig.api_secret!
-    );
-
-    if (expectedSignature === signature) {
-        // safe to write to database
-        console.log({ public_id });
+        if (response.ok) {
+            const data = await response.json();
+            // return data.secure_url;
+            console.log('Cloudinary response:', data);
+            // alert('File uploaded successfully: ' + data.secure_url);
+        } else {
+            const errorData = await response.json();
+            // return errorData.error.message;
+            console.error('Error uploading file:', errorData);
+            // alert('Failed to upload file: ' + errorData.error.message);
+        }
+    } 
+    catch (error) {
+        // return error;
+        console.error('Error uploading file:', error);
+        // alert('Failed to upload file');
     }
 }
+
+export async function POST(req: Request) {
+    const { username, handle, tweet, avatar, image } = await req.json();
+
+    const avatarUrl = await uploadAsset(avatar);
+    const imageUrl = await uploadAsset(image);
+
+    // if (avatarUrl && imageUrl) {
+    //     console.log(avatarUrl, imageUrl);
+
+        return new Response(
+            JSON.stringify({
+                username: username,
+                handle: handle,
+                tweet: tweet,
+                avatar: avatar,
+            }),
+            {
+                status: 200,
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+    }

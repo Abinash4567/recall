@@ -22,7 +22,7 @@ interface IUserData {
 
 interface selFile {
     name: string;
-    preview: Blob;
+    preview: string;
 }
 
 export function TweetLoading({ userData, files }: { userData: IUserData, files: selFile[] }) {
