@@ -1,17 +1,5 @@
-import useFetch from "@/lib/common/serverMethods"
+import useFetch from "@/lib/servermethods/serverMethods"
 import { TweetLoading } from "./tweetLoading";
-
-
-interface Itweet {
-  id: number;
-  username: string;
-  avatarImage: string;
-  handle: string;
-  tweet: string;
-  tweetImage: string;
-  createdAt: Date;
-  ownerId: number;
-};
 
 export default function Tweets({ userEmail }: {userEmail: string}) {
   const { data, loading, error } = useFetch({email: userEmail});
@@ -28,9 +16,14 @@ export default function Tweets({ userEmail }: {userEmail: string}) {
       }
 
       let selFile = [{
-        name: indi.avatarImage,
+        name: "name",
+        preview: indi.avatarImage
+      },
+      {
+        name: "name",
         preview: indi.tweetImage
-      }]
+      }
+    ]
 
       return <TweetLoading key={indi.id} userData={userData} files={selFile}/>
     })}

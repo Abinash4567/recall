@@ -252,7 +252,7 @@ export default function Page() {
 
     return (
         <div>
-            <div className="mt-8 flex justify-between">
+            <div className="mt-8 flex justify-between pb-7">
                 <div className="border border-blue-700 rounded-lg p-4 w-1/3 h-5/6">
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -372,6 +372,9 @@ export default function Page() {
                 <div>
                     <TweetLoading userData={userdata} files={files} />
                 </div>
+            </div>
+            <div className="mb-10 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl">
+                Your Tweets
             </div>
             <Tweets userEmail={session?.user?.email!}/>
         </div>

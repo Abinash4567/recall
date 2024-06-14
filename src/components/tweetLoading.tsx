@@ -69,7 +69,7 @@ export function TweetLoading({ userData, files }: { userData: IUserData, files: 
                             height={360}
                             width={400}
                             style={{ borderRadius: 9 }}
-                            alt="Picture of the author"
+                            alt="Picture of the tweet"
                         />
                     ) : (
                         <Skeleton className="w-[400px] h-[300px] mb-2" />
