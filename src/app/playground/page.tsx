@@ -16,6 +16,7 @@ import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from 'next/navigation';
 import { useSession } from "next-auth/react";
+import Tweets from "@/components/tweets";
 
 interface IUserData {
     username: string;
@@ -206,9 +207,9 @@ export default function Page() {
                 description: "Might be due to invalid file. Reloading!!",
             });
 
-            // setTimeout(()=>{
-            //     window.location.reload()
-            //     }, 2000)
+            setTimeout(()=>{
+                window.location.reload()
+                }, 2000)
 
         } else 
         {
@@ -221,8 +222,8 @@ export default function Page() {
                     tweet: data.tweet,
                     avatarURL: avatarResponse,
                     imageURL: imageResponse,
-                    email: session.user.email!,
-                    githubImage: session.user.image!,
+                    email: session?.user?.email!,
+                    githubImage: session?.user?.image!,
                 }),
             });
             // console.log(response);
@@ -232,9 +233,9 @@ export default function Page() {
                     description: "Add more!!",
                 });
 
-                // setTimeout(()=>{
-                //     window.location.reload()
-                //     }, 2000)
+                setTimeout(()=>{
+                    window.location.reload()
+                    }, 2000)
             } else 
             {
                 toast({
@@ -242,134 +243,137 @@ export default function Page() {
                     description: "Please try again. Refreshing!!",
                 });
                 
-                // setTimeout(()=>{
-                //     window.location.reload()
-                //     }, 2000)
+                setTimeout(()=>{
+                    window.location.reload()
+                    }, 2000)
             }
         }
     }
 
     return (
-        <div className="mt-8 flex justify-between">
-            <div className="border border-blue-700 rounded-lg p-4 w-1/3 h-5/6">
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div>
+            <div className="mt-8 flex justify-between">
+                <div className="border border-blue-700 rounded-lg p-4 w-1/3 h-5/6">
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)}>
 
 
-                        <FormField
-                            control={form.control}
-                            name="username"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Username</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Enter Username"
-                                            type="text"
-                                            {...field}
-                                            onChange={(e) => {
-                                                setUserData({ ...userdata, username: e.target.value });
-                                                field.onChange(e);
-                                            }}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                            <FormField
+                                control={form.control}
+                                name="username"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Username</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="Enter Username"
+                                                type="text"
+                                                {...field}
+                                                onChange={(e) => {
+                                                    setUserData({ ...userdata, username: e.target.value });
+                                                    field.onChange(e);
+                                                }}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                        <FormField
-                            control={form.control}
-                            name="handle"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>@User Handle</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Enter user handle"
-                                            type="text"
-                                            {...field}
-                                            onChange={(e) => {
-                                                setUserData({ ...userdata, handle: e.target.value });
-                                                field.onChange(e);
-                                            }}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                            <FormField
+                                control={form.control}
+                                name="handle"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>@User Handle</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="Enter user handle"
+                                                type="text"
+                                                {...field}
+                                                onChange={(e) => {
+                                                    setUserData({ ...userdata, handle: e.target.value });
+                                                    field.onChange(e);
+                                                }}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                        <FormField
-                            control={form.control}
-                            name="tweet"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Tweet</FormLabel>
-                                    <FormControl>
-                                        <Textarea
-                                            placeholder="Write about memorable event."
-                                            className="resize-none"
-                                            {...field}
-                                            onChange={(e) => {
-                                                setUserData({ ...userdata, tweet: e.target.value });
-                                                field.onChange(e);
-                                            }}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                            <FormField
+                                control={form.control}
+                                name="tweet"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Tweet</FormLabel>
+                                        <FormControl>
+                                            <Textarea
+                                                placeholder="Write about memorable event."
+                                                className="resize-none"
+                                                {...field}
+                                                onChange={(e) => {
+                                                    setUserData({ ...userdata, tweet: e.target.value });
+                                                    field.onChange(e);
+                                                }}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
 
-                        {status == 1 && <div className="mt-2">
-                            <div className="text-sm font-medium">Avatar</div>
-                            <div className="flex">
-                                <div
-                                    {...getRootProps({
-                                        className:
-                                            "rounded hover:bg-slate-800 bg-slate-900 hover:cursor-pointer h-[40px] w-[40px] pt-2"
-                                    })}>
+                            {status == 1 && <div className="mt-2">
+                                <div className="text-sm font-medium">Avatar</div>
+                                <div className="flex">
+                                    <div
+                                        {...getRootProps({
+                                            className:
+                                                "rounded hover:bg-slate-800 bg-slate-900 hover:cursor-pointer h-[40px] w-[40px] pt-2"
+                                        })}>
 
-                                    <input {...getInputProps({ name: "file" })} />
-                                    <div className="flex flex-col items-center justify-center gap-4">
-                                        <ArrowUpTrayIcon className="h-5 w-5 fill-current" />
+                                        <input {...getInputProps({ name: "file" })} />
+                                        <div className="flex flex-col items-center justify-center gap-4">
+                                            <ArrowUpTrayIcon className="h-5 w-5 fill-current" />
+                                        </div>
                                     </div>
+
+                                    <div className="ml-12 text-slate-500">{files.length >= 1 ? files[0].name : "eg. user_passport.jpg"}</div>
                                 </div>
+                            </div>}
 
-                                <div className="ml-12 text-slate-500">{files.length >= 1 ? files[0].name : "eg. user_passport.jpg"}</div>
-                            </div>
-                        </div>}
+                            {(status === 2 || status === 4) && <Loading className="rounded h-[60px] mt-4" />}
 
-                        {(status === 2 || status === 4) && <Loading className="rounded h-[60px] mt-4" />}
-
-                        {status == 3 && <div className="mt-2">
-                            <div className="text-sm font-medium">Image</div>
-                            <div className="flex">
-                                <div
-                                    {...getRootProps({
-                                        className:
-                                            "border-2 borer-red-500 rounded hover:bg-slate-800 bg-slate-900 hover:cursor-pointer h-[40px] w-[40px] pt-2"
-                                    })} >
-                                    <input {...getInputProps({ name: "file" })} />
-                                    <div className="flex flex-col items-center justify-center gap-4">
-                                        <ArrowUpTrayIcon className="h-5 w-5 fill-current" />
+                            {status == 3 && <div className="mt-2">
+                                <div className="text-sm font-medium">Image</div>
+                                <div className="flex">
+                                    <div
+                                        {...getRootProps({
+                                            className:
+                                                "border-2 borer-red-500 rounded hover:bg-slate-800 bg-slate-900 hover:cursor-pointer h-[40px] w-[40px] pt-2"
+                                        })} >
+                                        <input {...getInputProps({ name: "file" })} />
+                                        <div className="flex flex-col items-center justify-center gap-4">
+                                            <ArrowUpTrayIcon className="h-5 w-5 fill-current" />
+                                        </div>
                                     </div>
+
+                                    <div className="ml-12 text-slate-500">{files.length > 1 ? files[1].name : "eg. picnic.jpg"}</div>
                                 </div>
+                            </div>}
 
-                                <div className="ml-12 text-slate-500">{files.length > 1 ? files[1].name : "eg. picnic.jpg"}</div>
-                            </div>
-                        </div>}
+                            <Button type="submit" className="mt-4">Create Memory</Button>
+                        </form>
+                    </Form>
+                </div>
 
-                        <Button type="submit" className="mt-4">Create Memory</Button>
-                    </form>
-                </Form>
+                <div>
+                    <TweetLoading userData={userdata} files={files} />
+                </div>
             </div>
-
-            <div>
-                <TweetLoading userData={userdata} files={files} />
-            </div>
+            <Tweets userEmail={session?.user?.email!}/>
         </div>
     )
 }
