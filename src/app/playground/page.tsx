@@ -14,7 +14,8 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
+import { useSession } from "next-auth/react";
 
 interface IUserData {
     username: string;
@@ -29,6 +30,8 @@ interface selFile {
 
 export default function Page() {
     const router = useRouter();
+    const { data: session, status: logged } = useSession();
+
 
     const { toast } = useToast();
     const [status, setStatus] = useState<number>(1);
@@ -191,20 +194,25 @@ export default function Page() {
         const avatarResponse = await uploadAsset(avatarFile);
         const imageResponse = await uploadAsset(imageFile);
 
+        console.log(typeof avatarResponse);
+        console.log(typeof imageResponse);
+
         const response1 = await checkUrl(avatarResponse);
         const resonse2 = await checkUrl(imageResponse);
-        console.log(resonse2);
+
         if (!response1.valid || !resonse2.valid) {
             toast({
                 title: "Cannot Update your post.",
                 description: "Might be due to invalid file. Reloading!!",
             });
 
-            setTimeout(()=>{
-                window.location.reload()
-                }, 2000)
+            // setTimeout(()=>{
+            //     window.location.reload()
+            //     }, 2000)
 
-        } else {
+        } else 
+        {
+
             const response = await fetch("/api/upload", {
                 method: "POST",
                 body: JSON.stringify({
@@ -213,6 +221,8 @@ export default function Page() {
                     tweet: data.tweet,
                     avatarURL: avatarResponse,
                     imageURL: imageResponse,
+                    email: session?.user?.email,
+                    githubImage: session?.user?.image,
                 }),
             });
             // console.log(response);
@@ -222,9 +232,9 @@ export default function Page() {
                     description: "Add more!!",
                 });
 
-                setTimeout(()=>{
-                    window.location.reload()
-                    }, 2000)
+                // setTimeout(()=>{
+                //     window.location.reload()
+                //     }, 2000)
             } else 
             {
                 toast({
@@ -232,9 +242,9 @@ export default function Page() {
                     description: "Please try again. Refreshing!!",
                 });
                 
-                setTimeout(()=>{
-                    window.location.reload()
-                    }, 2000)
+                // setTimeout(()=>{
+                //     window.location.reload()
+                //     }, 2000)
             }
         }
     }
