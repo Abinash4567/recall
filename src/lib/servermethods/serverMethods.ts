@@ -20,17 +20,18 @@ const useFetch = ({ email }: { email: string }) => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const response = await fetch(`http://localhost:3000/api/tweet`, {
+                if(!email){
+                const response = await fetch('http://localhost:3000/api/tweet', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        email: "stickatstack@outlook.com"
+                        email: email
                     })
                 })
-                // console.log(response);
-                // setData(response.data);
+                console.log(response);
+                // setData(response?.data);
 
                 if (!response.ok) {
                     setError(true);
@@ -41,6 +42,7 @@ const useFetch = ({ email }: { email: string }) => {
                     console.log(result.data);
                 }
             }
+        }
             catch (error) {
                 setError(true);
             }

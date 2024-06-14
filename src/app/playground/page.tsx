@@ -2,21 +2,20 @@
 
 import Loading from "@/components/loading";
 import { TweetLoading } from "@/components/tweetLoading";
+import Tweets from "@/components/tweets";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
 import { ArrowUpTrayIcon } from '@heroicons/react/24/solid';
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { useSession } from "next-auth/react";
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import axios from "axios";
-import { useToast } from "@/components/ui/use-toast";
-import { useRouter } from 'next/navigation';
-import { useSession } from "next-auth/react";
-import Tweets from "@/components/tweets";
 
 interface IUserData {
     username: string;
@@ -30,8 +29,7 @@ interface selFile {
 }
 
 export default function Page() {
-    const router = useRouter();
-    const { data: session, status: logged } = useSession();
+    const { data: session, status: wait  } =  useSession();
 
 
     const { toast } = useToast();

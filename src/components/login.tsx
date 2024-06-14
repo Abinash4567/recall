@@ -24,7 +24,7 @@ export default function Login() {
                     
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56">
-                    <Button variant="secondary" onMouseDown={() => signOut()}>Sign out</Button>
+                    <Button variant="secondary" onMouseDown={() => signOut({ callbackUrl: 'http://localhost:3000/' })}>Sign out</Button>
                 </DropdownMenuContent>
             </DropdownMenu>
         );

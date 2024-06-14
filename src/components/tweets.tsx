@@ -1,11 +1,19 @@
 import useFetch from "@/lib/servermethods/serverMethods"
 import { TweetLoading } from "./tweetLoading";
+import Loading from "./loading";
 
 export default function Tweets({ userEmail }: {userEmail: string}) {
   const { data, loading, error } = useFetch({email: userEmail});
 
   return (
-  <div className="grid grid-cols-2 gap-4">
+
+    <>
+    <></>
+    {loading && <Loading className="rounded h-[60px] mt-4" />}
+
+    {error && <div className="b-10 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl text-red-600">Error fetching data</div>}
+
+  {!loading && <div className="grid grid-cols-2 gap-4">
     {data && data.map((indi)=>{
 
       let userData = {
@@ -28,5 +36,7 @@ export default function Tweets({ userEmail }: {userEmail: string}) {
       return <TweetLoading key={indi.id} userData={userData} files={selFile}/>
     })}
 
-  </div>)
+  </div>}
+
+  </>)
 }
