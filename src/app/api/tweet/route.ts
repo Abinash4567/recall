@@ -1,21 +1,21 @@
 import { db } from '@/lib/prisma';
 
 export async function POST(req: Request, res: Response) {
-    const { email } = await req.json();
-    if (!email) {
-        return new Response(JSON.stringify({ message: "Missing Parameter" }), {
-            status: 400,
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-    }
+    // if (!email) {
+    //     return new Response(JSON.stringify({ message: "Missing Parameter" }), {
+    //         status: 400,
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         }
+    //     });
 
     try 
     {
+    const { email } = await req.json();
+
         const response = await db.gitHubUser.findUnique({
             where: {
-                email: email,
+                email: email
             },
             select: {
                 tweets: true,

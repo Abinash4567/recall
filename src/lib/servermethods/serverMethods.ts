@@ -20,7 +20,7 @@ const useFetch = ({ email }: { email: string }) => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                if(!email){
+                if(email){
                 const response = await fetch('http://localhost:3000/api/tweet', {
                     method: 'POST',
                     headers: {
