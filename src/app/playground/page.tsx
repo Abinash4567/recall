@@ -221,8 +221,8 @@ export default function Page() {
                     tweet: data.tweet,
                     avatarURL: avatarResponse,
                     imageURL: imageResponse,
-                    email: session?.user?.email,
-                    githubImage: session?.user?.image,
+                    email: session.user.email!,
+                    githubImage: session.user.image!,
                 }),
             });
             // console.log(response);

@@ -7,7 +7,6 @@ export default function Home() {
     <div className="mx-20">
       <Navbar />
       <Hero />
-      <Login />
     </div>
   );
 }
