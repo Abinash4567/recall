@@ -1,47 +1,39 @@
-'use client';
+import useFetch from "@/lib/common/serverMethods"
+import { TweetLoading } from "./tweetLoading";
 
-import { useEffect } from "react";
-import { db } from "@/lib/prisma";
 
-function Tweets({ userEmail }: {userEmail: string}) {
-  let tweets = null;
-  useEffect(()=>{
-    async function load()
-    {
-      try {
-        const userWithTweets = await db.gitHubUser.findUnique({
-          where: {
-            email: userEmail,
-          },
-          include: {
-            tweets: true,
-          },
-        });
-    
-        if (!userWithTweets) {
-          throw new Error(`User with email ${userEmail} not found`);
-        }
-    
-        tweets = userWithTweets.tweets;
-      } 
-      catch (error) {
-        console.error("Error fetching tweets by email: ", error);
-        throw error;
-      } 
-      finally {
-        await db.$disconnect();
-      }
-    }
+interface Itweet {
+  id: number;
+  username: string;
+  avatarImage: string;
+  handle: string;
+  tweet: string;
+  tweetImage: string;
+  createdAt: Date;
+  ownerId: number;
+};
 
-    load();
-  }, [])
+export default function Tweets({ userEmail }: {userEmail: string}) {
+  const { data, loading, error } = useFetch({email: userEmail});
+
   return (
-    <div className='border border-green-500'>
-      {tweets && tweets.map((indi)=>{
-        return (<div key={indi.id}>{indi.tweet}</div>)
-      })}
-    </div>
-  )
-}
+  <div className="grid grid-cols-2 gap-4">
+    {data && data.map((indi)=>{
 
-export default Tweets
+      let userData = {
+        username: indi.username,
+        handle: indi.handle,
+        tweet: indi.tweet,
+        day: indi.createdAt.toString().slice(0, 10),
+      }
+
+      let selFile = [{
+        name: indi.avatarImage,
+        preview: indi.tweetImage
+      }]
+
+      return <TweetLoading key={indi.id} userData={userData} files={selFile}/>
+    })}
+
+  </div>)
+}

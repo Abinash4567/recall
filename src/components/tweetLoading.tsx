@@ -18,6 +18,7 @@ interface IUserData {
     username: string;
     handle: string;
     tweet: string;
+    day?: string 
 }
 
 interface selFile {
@@ -49,7 +50,7 @@ export function TweetLoading({ userData, files }: { userData: IUserData, files: 
                                     <Heart color="#ff0000" size={17} strokeWidth={3} />
                                 </div>
                                 <div className="text-sm pl-1 text-gray-400 pr-1">@{userData.handle}</div>
-                                <div className="text-sm text-gray-400 pr-1">20min</div>{" "}
+                                <div className="text-sm text-gray-400 pr-1">{userData.day ? userData.day : new Date().toJSON().slice(0,10).replace(/-/g,'/')}</div>{" "}
                             </>
                         ) : (
                             <Skeleton className="w-[300px] h-[20px] mb-2" />
