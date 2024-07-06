@@ -8,7 +8,7 @@ function Navbar() {
         <div className="mt-2 md:flex justify-between">
             <div className="text-2xl font-medium leading-none tracking-tight text-gray-900 md:text-3xl lg:text-3xl dark:text-white"><Link href='/'>recall</Link></div>
 
-            <NavigationMenuDemo />
+            {/* <NavigationMenuDemo /> */}
 
             <div className="flex justify-between">
                 <ModeToggle/>

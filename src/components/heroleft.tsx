@@ -1,5 +1,6 @@
 import { Button } from "./ui/button";
 import { Heart } from 'lucide-react';
+import Link from 'next/link'
 
 function HeroLeft() {
     return (
@@ -17,8 +18,9 @@ function HeroLeft() {
                 Designed to help individuals with Alzheimer&apos;s recall loved ones, our user-friendly interface and personalized features make it easy to navigate and meaningfully engage with their past.
                 </div>
 
-
-                <Button variant="secondary" className="rounded-3xl bg-blue-600 hover:bg-blue-900 mt-5 text-white">Try it now</Button>
+                <Link href="/playground">
+                    <Button variant="secondary" className="rounded-3xl bg-blue-600 hover:bg-blue-900 mt-5 text-white">Try it now</Button>
+                </Link>
             </div>
         </div>
     )

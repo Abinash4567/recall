@@ -20,17 +20,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+      <NextAuthSessionProvider> 
       <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
-            <NextAuthSessionProvider> 
               {children}
+        </ThemeProvider>
               <Toaster />
             </NextAuthSessionProvider>
-        </ThemeProvider>
       </body>
     </html>
   );
