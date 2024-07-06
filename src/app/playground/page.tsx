@@ -1,6 +1,7 @@
 'use client';
 
 import Loading from "@/components/loading";
+import { Progress } from "@/components/ui/progress"
 import { TweetLoading } from "@/components/tweetLoading";
 import Tweets from "@/components/tweets";
 import { Button } from "@/components/ui/button";
@@ -31,7 +32,6 @@ interface selFile {
 export default function Page() {
     const { data: session, status: wait  } =  useSession();
 
-
     const { toast } = useToast();
     const [status, setStatus] = useState<number>(1);
     const [userdata, setUserData] = useState<IUserData>({
@@ -43,6 +43,7 @@ export default function Page() {
     const [files, setFiles] = useState<selFile[]>([]);
     const [avatarFile, setAvatarFile] = useState<any>();
     const [imageFile, setImageFile] = useState<any>();
+    const [loadState, setLoadState] = useState<number>(0);
 
 
     const onDrop = useCallback((acceptedFiles: any[], rejectedFiles: any) => {
@@ -190,14 +191,18 @@ export default function Page() {
     }
 
     async function onSubmit(data: z.infer<typeof FormSchema>) {
+        setLoadState(10);
         const avatarResponse = await uploadAsset(avatarFile);
         const imageResponse = await uploadAsset(imageFile);
+        setLoadState(20);
 
         console.log(typeof avatarResponse);
         console.log(typeof imageResponse);
 
         const response1 = await checkUrl(avatarResponse);
         const resonse2 = await checkUrl(imageResponse);
+        setLoadState(70);
+
 
         if (!response1.valid || !resonse2.valid) {
             toast({
@@ -226,6 +231,7 @@ export default function Page() {
             });
             // console.log(response);
             if (response.ok) {
+                setLoadState(98);
                 toast({
                     title: "Post Added.",
                     description: "Add more!!",
@@ -362,7 +368,8 @@ export default function Page() {
                                 </div>
                             </div>}
 
-                            <Button type="submit" className="mt-4">Create Memory</Button>
+                            {!loadState && <Button type="submit" className="mt-4">Create Memory</Button>}
+                            {!!loadState && <div className="mt-5"><Progress value={loadState}/></div>}
                         </form>
                     </Form>
                 </div>

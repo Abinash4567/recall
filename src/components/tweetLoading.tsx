@@ -28,7 +28,7 @@ interface selFile {
 
 export function TweetLoading({ userData, files }: { userData: IUserData, files: selFile[] }) {
     return (
-        <div className="w-[500px] p-[12px] border border-slate-400 rounded-lg mb-4">
+        <div className="w-[500px] p-[12px] border border-slate-400 rounded-lg mb-4 h-fit">
             <div className="flex">
                 <div className="w-[45px] pr-2">
                     {files.length >= 1 ? (
