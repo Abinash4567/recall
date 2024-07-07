@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<p align='center'> 
+  <img src="https://github.com/Abinash4567/recall/assets/98229006/e50a59f4-a85b-48d1-9d61-75d1f9f1509f" alt="logo">
+  <h3 align="center">recall</h3>
+  <h4 align="center">Remember your loved ones</h3>
+</p>
 
-## Getting Started
 
-First, run the development server:
+<!-- ABOUT THE PROJECT -->
+## Glimpse
+<p align='center'> <img src="https://github.com/Abinash4567/recall/assets/98229006/1bc4c603-e097-4d54-afb8-57b4345ba7f8" alt="logo"></p>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Overview
+This project aims to enhance cognitive function in individuals with Alzheimer's by using custom Twitter posts as memory prompts. It leverages a curated content feed to pin memories and serves as a gentle reminder of past events.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
+- **Curated Content Feed**: Custom Twitter posts to serve memory prompts, helping to jog memories and maintain cognitive engagement.
+- **Effortless Image and Avatar Storage**: Utilizes Cloudinary for seamless image and avatar management, simplifying data handling.
+- **Personalized Control**: Users can customize the frequency of memory prompts to ensure optimal engagement and avoid overwhelm.
+- **Website Preview**: An integrated feature allowing users to preview how their custom posts will appear in their Twitter feed, ensuring a satisfying user experience.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Built With
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- [Next.js](https://nextjs.org/?ref=cal.com)
+- [React.js](https://reactjs.org/?ref=cal.com)
+- [Tailwind CSS](https://tailwindcss.com/?ref=cal.com)
+- [Prisma.io](https://prisma.io/?ref=cal.com)
+- [Shadcn](https://ui.shadcn.com)
+- [Supabase](https://supabase.com/)
 
-## Learn More
+## Installation
 
-To learn more about Next.js, take a look at the following resources:
+To run this project locally, follow these steps:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Clone the repository: `git clone https://github.com/Abinash4567/recall`
+2. Install dependencies: `npm install`
+4. Set up pgAdmin or supabase database on your need
+5. Create a `.env` file like `.env.example`
+6. Add database, URL and secret keys as in .env.example
+7. Migrate prisma model to database: `npx prisma migrate`
+9. Start the development server: `npm run dev`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Usage
 
-## Deploy on Vercel
+1. After setting up the project locally, access the application at `localhost:3000`.
+2. Create an account or log in using github account.
+3. Create posts to be shown in twitter(now X) feed.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+___
