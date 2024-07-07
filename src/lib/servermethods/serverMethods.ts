@@ -21,7 +21,7 @@ const useFetch = ({ email }: { email: string }) => {
             setLoading(true);
             try {
                 if(email){
-                const response = await fetch('http://localhost:3000/api/tweet', {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/tweet`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
