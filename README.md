@@ -39,6 +39,29 @@ To run this project locally, follow these steps:
 7. Migrate prisma model to database: `npx prisma migrate`
 9. Start the development server: `npm run dev`
 
+# Integrate Chrome Extension
+
+## Step 1: Open Chrome Extensions Page
+
+First, open your Chrome browser and go to the extensions page by navigating to `chrome://extensions`.
+
+## Step 2: Enable Developer Mode
+
+In the top right corner of the extensions page, toggle the switch to enable **Developer mode**.
+
+## Step 3: Click "Load Unpacked"
+
+Once Developer mode is enabled, you will see additional buttons. Click on the **Load unpacked** button.
+
+## Step 4: Select the Extension Folder
+
+A file dialog will appear. Navigate to the directory where your unpacked extension files are located and select the folder. Make sure the folder contains the `manifest.json` file.
+
+## Step 5: Verify Installation
+
+After selecting the folder, the extension will be loaded and should appear in your list of extensions. You can enable or disable it from the extensions page.
+
+
 ## Usage
 
 1. After setting up the project locally, access the application at `localhost:3000`.
